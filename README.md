@@ -1,5 +1,5 @@
 # Python-Whatsapp-Chatbot
-A chatbot built in python using Selenium module.
+A chatbot built in python using Selenium module. Add your Microsoft Azure API key in loreal.py to run the Image Captioning bot.
 
 Currently the chatbot is only capable of the following tasks:
 
