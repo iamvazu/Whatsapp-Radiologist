@@ -9,6 +9,31 @@ import requests
 import pyautogui
 from loreal import caption
 import os
+from chexnet import predict
+
+
+
+def radio(images,action):
+	image = images[-1]
+	text_box = browser.find_element_by_class_name("_2S1VP")
+	response = "Diagnosing starting... Please wait "+name+".\n"
+	text_box.send_keys(response)
+	action = webdriver.common.action_chains.ActionChains(browser)
+	print('New image found, saving')
+	sleep(5)
+	save(image,action)
+	try:
+		preds = predict(path)
+		c = 1
+		text_box.send_keys('Top 3 probabilities :\n')
+		for pred in preds:
+			text_box.send_keys(str(c)+'. '+pred+'\n')
+			c += 1
+	except Exception as e:
+		print(e)
+		text_box.send_keys('The image you sent is either too hard for me to understand or it is a server issue, you can try sending me image again\n')
+	os.remove(path) # Cleanup
+
 
 options = Options()
 options.set_headless(headless=True)
@@ -26,7 +51,8 @@ def save(image,action):
 	'''To save the image'''
 	action.context_click(image).perform()
 	pyautogui.typewrite(['down','down','down','down','enter'])
-	file = ' WhatsappTest'
+	sleep(1)
+	file = 'WhatsappTest'
 	pyautogui.typewrite(file)
 	sleep(0.5)
 	pyautogui.typewrite(['enter'])
@@ -36,11 +62,11 @@ def save(image,action):
 def getCaption(images,action):
 	image = images[-1]
 	text_box = browser.find_element_by_class_name("_2S1VP")
-	response = "Hi "+name+". Aravind's bot here. Let me analyze the image and say what it is\n"
+	response = "Analyzing... Please wait "+name+".\n"
 	text_box.send_keys(response)
 	action = webdriver.common.action_chains.ActionChains(browser)
 	print('New image found, saving')
-	sleep(5)
+	sleep(4)
 	save(image,action)
 	try:
 		cap = caption(path)
@@ -53,7 +79,7 @@ def getCaption(images,action):
 
 def getNews():
 	text_box = browser.find_element_by_class_name("_2S1VP")
-	response = "Hi "+name+". Aravind's Bot here :). Let me and fetch send top 5 latest news:\n"
+	response = "Let me and fetch send top 5 latest news:\n"
 	text_box.send_keys(response)
 	soup = BeautifulSoup(requests.get(url).content, "html5lib")
 	articles = soup.find_all('article', class_="MQsxIb xTewfe R7GTQ keNKEd j7vNaf Cc0Z5d YKEnGe EyNMab t6ttFe Fm1jeb EjqUne")
@@ -73,13 +99,13 @@ while True:
 		ele = unread[-1]
 		action = webdriver.common.action_chains.ActionChains(browser)
 		action.move_to_element_with_offset(ele, 0, -20)
-		action.click()
-		action.perform()
 		try:
 			action.click()
 			action.perform()
+			action.click()
+			action.perform()
 		except:
-			continue
+			pass
 		name = browser.find_element_by_class_name("_2zCDG").text
 		message = browser.find_elements_by_class_name("vW7d1")[-1]
 		images = message.find_elements_by_class_name("_3v3PK")
@@ -92,7 +118,7 @@ while True:
 				text_box.send_keys(response)
 		if name in bot_users:
 			if len(images) != 0:
-				getCaption(images, action)
+				radio(images, action)
 			elif 'show' in message.text.lower() and 'news' in message.text.lower() and 'don' not in message.text.lower():
 				getNews()
 		if 'deactivate' in message.text.lower():
