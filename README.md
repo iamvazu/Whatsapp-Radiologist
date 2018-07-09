@@ -14,7 +14,7 @@ Feel free to improve the code and add features.
 Currently the chatbot is only capable of the following tasks:
 
 
-## 2. Lung Xray Diagnosis
+## 1. Lung Xray Diagnosis
 Using chexnet model. refer: https://github.com/brucechou1983/CheXNet-Keras for keras chexnet
 
 and https://arxiv.org/pdf/1711.05225.pdf for the original paper.
