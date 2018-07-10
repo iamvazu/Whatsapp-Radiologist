@@ -24,4 +24,4 @@ and https://arxiv.org/pdf/1711.05225.pdf for the original paper.
 A bot that captions the image sent to you using Microsoft's Azure platform. You will need an API key from Azure to run this. If you dont have one, you can make your own "caption" function and play around the image.
 
 ## 3.. News show
-Run News.py to start the bot with the news mode ON. Any message you will get after you run the bot having the word "news" in it will be treated as a request for latest headlines. The bot then fetches the latest news. 
+Any message you will get after you run the bot having the word "show news" in it will be treated as a request for latest headlines. The bot then fetches the latest news. 
